@@ -1,6 +1,6 @@
 "use strict";
 
-const menuItemLi = document.getElementById("menu-item-list");
+const menuItemTable = document.getElementById("menu-item-table-body");
 const token = localStorage.getItem("token");
 
 // Check if token exists
@@ -33,15 +33,74 @@ if (!token) {
         })
         .then(data => {
             if (!data) return;
-            // Display list of menu items
+            // Display table of menu items
             if (data && data.length > 0) {
+                menuItemTable.innerHTML = "";
+            
                 data.forEach(menuItem => {
-                    const li = document.createElement("li");
-                    li.textContent = menuItem.name;
-                    menuItemLi.appendChild(li);
+                    const tr = document.createElement("tr");
+            
+                    // Name column
+                    const nameTd = document.createElement("td");
+                    nameTd.textContent = menuItem.name;
+                    tr.appendChild(nameTd);
+            
+                    // Ingredients column (join array to string)
+                    const ingredientsTd = document.createElement("td");
+                    ingredientsTd.textContent = menuItem.ingredients.join(", ");
+                    tr.appendChild(ingredientsTd);
+            
+                    // Price column
+                    const priceTd = document.createElement("td");
+                    priceTd.textContent = `$${menuItem.price.toFixed(2)}`;
+                    tr.appendChild(priceTd);
+            
+                    // Vegan alternative column
+                    const veganTd = document.createElement("td");
+                    veganTd.textContent = menuItem.vegan_alternative ? "Yes" : "No";
+                    tr.appendChild(veganTd);
+            
+                    // Update button column
+                    const updateTd = document.createElement("td");
+                    const updateBtn = document.createElement("button");
+                    updateBtn.textContent = "Update";
+                    updateBtn.addEventListener("click", () => {
+                        // update logic here
+                        console.log("Update for: ", menuItem._id);
+                    });
+                    updateTd.appendChild(updateBtn);
+                    tr.appendChild(updateTd);
+            
+                    // Delete button column
+                    const deleteTd = document.createElement("td");
+                    const deleteBtn = document.createElement("button");
+                    deleteBtn.textContent = "Delete";
+                    deleteBtn.addEventListener("click", () => {
+                        // delete route here
+                        if (confirm(`Are you sure you want to delete "${menuItem.name}"?`)) {
+                            fetch(`https://projectdt207g-api.onrender.com/menu/${menuItem._id}`, {
+                                method: "DELETE",
+                                headers: {
+                                    "Authorization": `Bearer ${token}`,
+                                }
+                            })
+                            .then(res => {
+                                if (res.ok) {
+                                    tr.remove(); // Remove row if delete was successful
+                                    alert("Deleted successfully");
+                                } else {
+                                    alert("Failed to delete item");
+                                }
+                            });
+                        }
+                    });
+                    deleteTd.appendChild(deleteBtn);
+                    tr.appendChild(deleteTd);
+            
+                    menuItemTable.appendChild(tr);
                 });
             } else {
-                menuItemLi.innerHTML = "<li>No menu items found.</li>";
+                menuItemTable.innerHTML = `<tr><td colspan="6">No menu items found.</td></tr>`;
             }
         })
         .catch(error => {
