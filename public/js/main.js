@@ -2,7 +2,7 @@
 
 document.getElementById("login-form").addEventListener("submit", loginUser);
 
-const url = "https://projectdt207g-api.onrender.com";
+const url = "https://projectdt207g-api.onrender.com/admin/login";
 
 // Login user
 async function loginUser(e) {
@@ -12,7 +12,7 @@ async function loginUser(e) {
     const passwordInput = document.getElementById("login-password").value;
 
     if (!usernameInput || !passwordInput) {
-        showFeedback("Please enter both username and password");
+        userFeedback("Please enter both username and password");
         return;
     }
 
@@ -37,11 +37,11 @@ async function loginUser(e) {
         } else {
             const errorData = await resp.json();
             const errorMessage = errorData.message || errorData.error || "Login failed";
-            showFeedback(errorMessage);
+            userFeedback(errorMessage);
         }
 
     } catch (error) {
-        showFeedback("An error occurred during login. Please try again.");
+        userFeedback("An error occurred during login. Please try again.");
         console.error(error);
     }
 }
