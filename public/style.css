@@ -1,3 +1,55 @@
 body {
     background-color: yellow;
 }
+
+/* Form styling */
+#add-menu-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    max-width: 100%;
+    margin-top: 2em;
+    align-items: center;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .form-group label {
+    margin-bottom: 0.25em;
+  }
+
+  .form-group input,
+  .form-group select {
+    padding: 0.2em;
+    font-size: 1em;
+  }
+
+  button {
+    font-size: 1rem;
+    cursor: pointer;
+    max-width: 100px;
+  }
+
+  @media (min-width: 768px) {
+    #add-menu-form {
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .form-group {
+      flex: 1;
+      max-width: 200px;
+    }
+
+    #submit-btn {
+      display: block;
+      margin: 0 auto;
+    }
+  }

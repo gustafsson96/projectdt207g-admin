@@ -109,6 +109,49 @@ if (!token) {
         });
 }
 
+// Add new menu item
+document.getElementById("add-menu-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("item-name").value.trim();
+    const ingredientsRaw = document.getElementById("item-ingredients").value.trim();
+    const price = parseFloat(document.getElementById("item-price").value);
+    const veganAlternative = document.getElementById("item-vegan").checked;
+
+    const ingredients = ingredientsRaw.split(",").map(i => i.trim()).filter(i => i.length > 0);
+
+    const newItem = { name, ingredients, price, vegan_alternative: veganAlternative };
+
+    try {
+        const res = await fetch("https://projectdt207g-api.onrender.com/menu", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(newItem)
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            formFeedback(data.message || "Failed to add menu item.", true);
+            return;
+        }
+
+        formFeedback(data.message || "Menu item added!", false);
+
+        // Reset form
+        e.target.reset();
+
+        // Refresh table
+        location.reload();
+    } catch (err) {
+        console.error("Add item error:", err);
+        formFeedback("An unexpected error occurred. Please try again.", true);
+    }
+});
+
 // Logout user
 document.getElementById("logout-btn").addEventListener("click", () => {
     localStorage.removeItem("token");

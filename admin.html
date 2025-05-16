@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,23 +9,56 @@
     <script src="js/admin.js" defer></script>
     <script src="js/userFeedback.js" defer></script>
 </head>
+
 <body>
     <p>You reached the Admin site!</p>
+    <!-- Form to add new menu items -->
+    <form id="add-menu-form">
+        <div class="form-group">
+          <label for="item-name">Name:</label>
+          <input type="text" id="item-name" required>
+        </div>
+      
+        <div class="form-group">
+          <label for="item-ingredients">Ingredients (comma-separated):</label>
+          <input type="text" id="item-ingredients" required>
+        </div>
+      
+        <div class="form-group">
+          <label for="item-price">Price:</label>
+          <input type="number" id="item-price" step="0.01" required>
+        </div>
+      
+        <div class="form-group">
+          <label for="item-vegan">
+            Vegan Alternative:
+            <input type="checkbox" id="item-vegan">
+          </label>
+        </div>
+        <div class="form-group">
+        <button type="submit" id="submit-btn">Add Item</button>
+        </div>
+      </form>
+      <div id="form-feedback"></div>
+    
+    <!-- Display menu items in table -->
     <table>
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Ingredients</th>
-            <th>Price</th>
-            <th>Vegan Alternative</th>
-            <th></th>
-            <th></th>
-          </tr>
+            <tr>
+                <th>Name</th>
+                <th>Ingredients</th>
+                <th>Price</th>
+                <th>Vegan Alternative</th>
+                <th></th>
+                <th></th>
+            </tr>
         </thead>
         <tbody id="menu-item-table-body">
-          <!-- JS will populate rows here -->
+            <!-- JS will populate rows here -->
         </tbody>
-      </table>
+    </table>
+    <div id="user-feedback"></div>
     <button id="logout-btn">Log Out</button>
 </body>
+
 </html>
