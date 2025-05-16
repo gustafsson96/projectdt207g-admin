@@ -1,5 +1,6 @@
 "use strict";
 
+const protectedContent = document.getElementById("protected-content");
 const menuItemTable = document.getElementById("menu-item-table-body");
 const token = localStorage.getItem("token");
 
@@ -11,6 +12,9 @@ if (!token) {
     }, 3000);
     // Fetch data if token exists
 } else {
+    // Display initially hidden admin content
+    document.getElementById("protected-content").style.display = "block";
+
     fetch("https://projectdt207g-api.onrender.com/menu")
         .then(async res => {
             // Handle authorization errors if request fails

@@ -2,6 +2,10 @@ body {
     background-color: yellow;
 }
 
+#protected-content {
+    display: none;
+}
+
 /* Form styling */
 #add-menu-form {
     display: flex;
