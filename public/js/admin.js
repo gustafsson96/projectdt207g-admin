@@ -48,7 +48,12 @@ if (!token) {
                     const nameTd = document.createElement("td");
                     nameTd.textContent = menuItem.name;
                     tr.appendChild(nameTd);
-            
+
+                    // Category column
+                    const categoryTd = document.createElement("td");
+                    categoryTd.textContent = menuItem.category;
+                    tr.appendChild(categoryTd);
+
                     // Ingredients column (join array to string)
                     const ingredientsTd = document.createElement("td");
                     ingredientsTd.textContent = menuItem.ingredients.join(", ");
@@ -118,13 +123,14 @@ document.getElementById("add-menu-form").addEventListener("submit", async (e) =>
     e.preventDefault();
 
     const name = document.getElementById("item-name").value.trim();
+    const category = document.getElementById("item-category").value.trim();
     const ingredientsRaw = document.getElementById("item-ingredients").value.trim();
     const price = parseFloat(document.getElementById("item-price").value);
     const veganAlternative = document.getElementById("item-vegan").checked;
 
     const ingredients = ingredientsRaw.split(",").map(i => i.trim()).filter(i => i.length > 0);
 
-    const newItem = { name, ingredients, price, vegan_alternative: veganAlternative };
+    const newItem = { name, category, ingredients, price, vegan_alternative: veganAlternative };
 
     try {
         const res = await fetch("https://projectdt207g-api.onrender.com/menu", {
