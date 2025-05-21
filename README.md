@@ -1,15 +1,9 @@
 # PROJECT - ADMIN (Backend-baserad webbutveckling, DT207G)
 
-This admin site is part of the final project for the course Backend-baserad webbutveckling, dt207g, at Mittuniversitet, Sundsvall.
-<br><br>
-Link to the live admin site: [The Green Slice Admin](https://dt207gadminjg.netlify.app/admin.html)
-<br><br>
-The other parts of the project are:
-* The backend API - [API repository](https://github.com/gustafsson96/projectdt207g-api.git)
-* Frontend website - [The Green Slice Website repository](https://github.com/gustafsson96/projectdt207g-site.git)
-
 ## Overview
-The admin site manages menu items for the fictional restaurant "The Green Slice" and allows an admin to:
+
+This admin site is part of the final project for the course Backend-baserad webbutveckling, dt207g, at Mittuniversitet, Sundsvall.
+It manages menu items for the fictional restaurant "The Green Slice" and allows an admin to:
 * Log in
 * View existing menu items
 * Add a new menu item
@@ -17,6 +11,12 @@ The admin site manages menu items for the fictional restaurant "The Green Slice"
 * Log out
 
 The site interacts with the backend API created specifically for this project and the protected content is secured via JWT (JSON Web Token) authentication.
+
+Link to the live admin site: [The Green Slice Admin](https://dt207gadminjg.netlify.app/admin.html)
+<br><br>
+The other parts of the project are:
+* The backend API - [API repository](https://github.com/gustafsson96/projectdt207g-api.git)
+* Frontend website - [The Green Slice Website repository](https://github.com/gustafsson96/projectdt207g-site.git)
 
 ## Features
 * Login required to access admin functionality. Username and password are validated in the backend.
