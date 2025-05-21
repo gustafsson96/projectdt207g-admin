@@ -31,7 +31,7 @@ The site interacts with the backend API created specifically for this project an
 * HTML for basic structure.
 * CSS for styling.
 * Vite for dev server and build (dev dependency).
-* Communication with backend: Node.js, Express, MongoDB Atlas (handeled separately).
+* Communication with backend: Node.js, Express, MongoDB Atlas (handled separately).
 * JWT for authentication.
 * Netlify for deployment.
 
