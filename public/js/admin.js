@@ -12,8 +12,10 @@ if (!token) {
 } else {
     document.getElementById("protected-content").style.display = "block";
 
-    fetch("https://projectdt207g-api.onrender.com/menu")
-        .then(async res => {
+    // Function to load menu items
+    async function loadMenuItems() {
+        try {
+            const res = await fetch("https://projectdt207g-api.onrender.com/menu");
             if (!res.ok) {
                 const errorData = await res.json();
                 const errorMessage = errorData.message || "Authorization failed.";
@@ -24,14 +26,11 @@ if (!token) {
                         window.location.href = "index.html";
                     }, 3000);
                 }
-                return null;
+                return;
             }
-            return res.json();
-        })
-        .then(data => {
-            if (!data) return;
+            const data = await res.json();
 
-            if (data && data.length > 0) {
+            if (data.length > 0) {
                 menuItemTable.innerHTML = "";
 
                 data.forEach(menuItem => {
@@ -61,7 +60,6 @@ if (!token) {
                     const updateBtn = document.createElement("button");
                     updateBtn.textContent = "Update";
                     updateBtn.addEventListener("click", () => {
-                        // Remove existing edit row if any
                         const existingEditRow = document.querySelector("tr.editing-row");
                         if (existingEditRow) {
                             existingEditRow.previousSibling.querySelector("button").disabled = false;
@@ -117,8 +115,9 @@ if (!token) {
                                     return;
                                 }
 
-                                formFeedback("Updated successfully!", false);
-                                    location.reload();
+                                userFeedback("Menu item updated successfully.", false);
+                                // Refresh the list
+                                loadMenuItems();
                             } catch (err) {
                                 console.error("Update error:", err);
                                 alert("An error occurred while updating.");
@@ -141,8 +140,9 @@ if (!token) {
                             })
                                 .then(res => {
                                     if (res.ok) {
+                                        // Remove the row
                                         tr.remove();
-                                        alert("Deleted successfully");
+                                        userFeedback("Deleted successfully", false);
                                     } else {
                                         alert("Failed to delete item");
                                     }
@@ -157,55 +157,59 @@ if (!token) {
             } else {
                 menuItemTable.innerHTML = `<tr><td colspan="6">No menu items found.</td></tr>`;
             }
-        })
-        .catch(error => {
+        } catch (error) {
             console.error("Error fetching menu items: ", error);
             userFeedback("Failed to load menu items.", true);
-        });
-}
-
-// Add new menu item
-document.getElementById("add-menu-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const name = document.getElementById("item-name").value.trim();
-    const category = document.getElementById("item-category").value.trim();
-    const ingredientsRaw = document.getElementById("item-ingredients").value.trim();
-    const price = parseFloat(document.getElementById("item-price").value);
-    const veganAlternative = document.getElementById("item-vegan").checked;
-
-    const ingredients = ingredientsRaw.split(",").map(i => i.trim()).filter(i => i.length > 0);
-
-    const newItem = { name, category, ingredients, price, vegan_alternative: veganAlternative };
-
-    try {
-        const res = await fetch("https://projectdt207g-api.onrender.com/menu", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(newItem)
-        });
-
-        const data = await res.json();
-
-        if (!res.ok) {
-            formFeedback(data.message || "Failed to add menu item.", true);
-            return;
         }
-
-        formFeedback(data.message || "Menu item added!", false);
-        e.target.reset();
-        location.reload();
-    } catch (err) {
-        console.error("Add item error:", err);
-        formFeedback("An unexpected error occurred. Please try again.", true);
     }
-});
 
-// Logout
-document.getElementById("logout-btn").addEventListener("click", () => {
-    localStorage.removeItem("token");
-    window.location.href = "index.html";
-});
+    // Load items initially
+    loadMenuItems();
+
+    // Add new menu item
+    document.getElementById("add-menu-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("item-name").value.trim();
+        const category = document.getElementById("item-category").value.trim();
+        const ingredientsRaw = document.getElementById("item-ingredients").value.trim();
+        const price = parseFloat(document.getElementById("item-price").value);
+        const veganAlternative = document.getElementById("item-vegan").checked;
+
+        const ingredients = ingredientsRaw.split(",").map(i => i.trim()).filter(i => i.length > 0);
+
+        const newItem = { name, category, ingredients, price, vegan_alternative: veganAlternative };
+
+        try {
+            const res = await fetch("https://projectdt207g-api.onrender.com/menu", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(newItem)
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                formFeedback(data.message || "Failed to add menu item.", true);
+                return;
+            }
+
+            formFeedback(data.message || "Menu item added!", false);
+            e.target.reset();
+            // Refresh menu list
+            loadMenuItems();
+        } catch (err) {
+            console.error("Add item error:", err);
+            formFeedback("An unexpected error occurred. Please try again.", true);
+        }
+    });
+
+    // Logout
+    document.getElementById("logout-btn").addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "index.html";
+    });
+}
