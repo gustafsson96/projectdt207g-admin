@@ -1,0 +1,124 @@
+#protected-content {
+    display: none;
+}
+
+.heading {
+    text-align: center;
+}
+
+.heading h1 {
+    font-size: 3em;
+    margin: 1.5em 0 0.2em;
+}
+
+.heading p {
+    font-size: 1.5em;
+    font-style: italic;
+    padding: 0;
+    margin: 0;
+    color: #6c757d;
+}
+
+/* Container styling */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2em;
+    margin-top: 2em;
+}
+
+/* Form section */
+.form-section h2 {
+    margin: 0;
+}
+
+/* Form styling */
+#add-menu-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.form-group label {
+    margin-bottom: 0.25em;
+}
+
+input[type="text"],
+input[type="number"] {
+    padding: 0.5em;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+button {
+    font-size: 1rem;
+    padding: 0.5em 1em;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Table section */
+.table-section h2 {
+    padding-left: 0.5em;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    border: 2px solid #f2f2f2;
+    border-radius: 10px 10px 0 0;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 0.5em 0.8em;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+th {
+    padding: 1em;
+    background-color: #f2f2f2;
+    font-weight: bold;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+@media (min-width: 768px) {
+    #add-menu-form {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-end;
+    }
+
+    .form-group {
+        flex: 1;
+        max-width: 200px;
+    }
+
+    #submit-btn {
+        display: block;
+        margin: 0 auto;
+    }
+}
