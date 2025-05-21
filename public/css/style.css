@@ -4,3 +4,63 @@ body {
     padding: 0;
 }
 
+h1 {
+  text-align: center;
+  font-size: 3em;
+  margin: 2.5em 0.2em 0.6em;
+}
+
+/* Form container */
+.form-container {
+  background: white;
+  padding: 2em 3em;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  width: 400px;
+  box-sizing: border-box;
+}
+
+/* Form styling */
+#login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"] {
+  padding: 0.7em;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#login-form input[type="text"]:focus,
+#login-form input[type="password"]:focus {
+  outline: none;
+  border-color: #1e8449;
+}
+
+#login-form button {
+  padding: 0.7em;
+  background-color: #1e8449;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#login-form button:hover {
+  background-color: #176636;
+}
+
+/* User feedback styling */
+#user-feedback {
+  margin-top: 1em;
+  color: #e74c3c;
+  text-align: center;
+}
