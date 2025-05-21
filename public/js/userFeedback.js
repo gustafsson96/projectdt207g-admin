@@ -15,7 +15,7 @@ function userFeedback(message, isError = true) {
     }, 5000);
 }
 
-// Function to display user form feedback (for adding new item)
+// Function to display user form feedback (for adding/updating item)
 function formFeedback(message, isError = true) {
     const feedback = document.getElementById("form-feedback");
     if (!feedback) return;

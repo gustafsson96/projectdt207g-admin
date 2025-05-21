@@ -4,24 +4,19 @@ const protectedContent = document.getElementById("protected-content");
 const menuItemTable = document.getElementById("menu-item-table-body");
 const token = localStorage.getItem("token");
 
-// Check if token exists
 if (!token) {
     userFeedback("You must be logged in to view this page.", true);
     setTimeout(() => {
         window.location.href = "index.html";
     }, 3000);
-    // Fetch data if token exists
 } else {
-    // Display initially hidden admin content
     document.getElementById("protected-content").style.display = "block";
 
     fetch("https://projectdt207g-api.onrender.com/menu")
         .then(async res => {
-            // Handle authorization errors if request fails
             if (!res.ok) {
                 const errorData = await res.json();
                 const errorMessage = errorData.message || "Authorization failed.";
-
                 userFeedback(errorMessage, true);
                 if (res.status === 401 || res.status === 403) {
                     localStorage.removeItem("token");
@@ -31,61 +26,112 @@ if (!token) {
                 }
                 return null;
             }
-
-            // Return data
             return res.json();
         })
         .then(data => {
             if (!data) return;
-            // Display table of menu items
+
             if (data && data.length > 0) {
                 menuItemTable.innerHTML = "";
-            
+
                 data.forEach(menuItem => {
                     const tr = document.createElement("tr");
-            
-                    // Name column
+
                     const nameTd = document.createElement("td");
                     nameTd.textContent = menuItem.name;
                     tr.appendChild(nameTd);
 
-                    // Category column
                     const categoryTd = document.createElement("td");
                     categoryTd.textContent = menuItem.category;
                     tr.appendChild(categoryTd);
 
-                    // Ingredients column (join array to string)
                     const ingredientsTd = document.createElement("td");
                     ingredientsTd.textContent = menuItem.ingredients.join(", ");
                     tr.appendChild(ingredientsTd);
-            
-                    // Price column
+
                     const priceTd = document.createElement("td");
                     priceTd.textContent = `$${menuItem.price.toFixed(2)}`;
                     tr.appendChild(priceTd);
-            
-                    // Vegan alternative column
+
                     const veganTd = document.createElement("td");
                     veganTd.textContent = menuItem.vegan_alternative ? "Yes" : "No";
                     tr.appendChild(veganTd);
-            
-                    // Update button column
+
                     const updateTd = document.createElement("td");
                     const updateBtn = document.createElement("button");
                     updateBtn.textContent = "Update";
                     updateBtn.addEventListener("click", () => {
-                        // update logic here
-                        console.log("Update for: ", menuItem._id);
+                        // Remove existing edit row if any
+                        const existingEditRow = document.querySelector("tr.editing-row");
+                        if (existingEditRow) {
+                            existingEditRow.previousSibling.querySelector("button").disabled = false;
+                            existingEditRow.remove();
+                        }
+
+                        const editRow = document.createElement("tr");
+                        editRow.classList.add("editing-row");
+
+                        editRow.innerHTML = `
+                            <td><input type="text" value="${menuItem.name}" id="edit-name-${menuItem._id}"></td>
+                            <td><input type="text" value="${menuItem.category}" id="edit-category-${menuItem._id}"></td>
+                            <td><input type="text" value="${menuItem.ingredients.join(", ")}" id="edit-ingredients-${menuItem._id}"></td>
+                            <td><input type="number" step="0.01" value="${menuItem.price}" id="edit-price-${menuItem._id}"></td>
+                            <td><input type="checkbox" id="edit-vegan-${menuItem._id}" ${menuItem.vegan_alternative ? "checked" : ""}></td>
+                            <td colspan="2">
+                                <button id="save-${menuItem._id}">Save</button>
+                                <button id="cancel-${menuItem._id}">Cancel</button>
+                            </td>
+                        `;
+
+                        tr.after(editRow);
+                        updateBtn.disabled = true;
+
+                        document.getElementById(`cancel-${menuItem._id}`).addEventListener("click", () => {
+                            editRow.remove();
+                            updateBtn.disabled = false;
+                        });
+
+                        document.getElementById(`save-${menuItem._id}`).addEventListener("click", async () => {
+                            const updatedItem = {
+                                name: document.getElementById(`edit-name-${menuItem._id}`).value.trim(),
+                                category: document.getElementById(`edit-category-${menuItem._id}`).value.trim(),
+                                ingredients: document.getElementById(`edit-ingredients-${menuItem._id}`).value.split(",").map(i => i.trim()),
+                                price: parseFloat(document.getElementById(`edit-price-${menuItem._id}`).value),
+                                vegan_alternative: document.getElementById(`edit-vegan-${menuItem._id}`).checked
+                            };
+
+                            try {
+                                const res = await fetch(`https://projectdt207g-api.onrender.com/menu/${menuItem._id}`, {
+                                    method: "PUT",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                        "Authorization": `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify(updatedItem)
+                                });
+
+                                const result = await res.json();
+
+                                if (!res.ok) {
+                                    alert(result.message || "Failed to update item");
+                                    return;
+                                }
+
+                                formFeedback("Updated successfully!", false);
+                                    location.reload();
+                            } catch (err) {
+                                console.error("Update error:", err);
+                                alert("An error occurred while updating.");
+                            }
+                        });
                     });
                     updateTd.appendChild(updateBtn);
                     tr.appendChild(updateTd);
-            
-                    // Delete button column
+
                     const deleteTd = document.createElement("td");
                     const deleteBtn = document.createElement("button");
                     deleteBtn.textContent = "Delete";
                     deleteBtn.addEventListener("click", () => {
-                        // delete route here
                         if (confirm(`Are you sure you want to delete "${menuItem.name}"?`)) {
                             fetch(`https://projectdt207g-api.onrender.com/menu/${menuItem._id}`, {
                                 method: "DELETE",
@@ -93,19 +139,19 @@ if (!token) {
                                     "Authorization": `Bearer ${token}`,
                                 }
                             })
-                            .then(res => {
-                                if (res.ok) {
-                                    tr.remove(); // Remove row if delete was successful
-                                    alert("Deleted successfully");
-                                } else {
-                                    alert("Failed to delete item");
-                                }
-                            });
+                                .then(res => {
+                                    if (res.ok) {
+                                        tr.remove();
+                                        alert("Deleted successfully");
+                                    } else {
+                                        alert("Failed to delete item");
+                                    }
+                                });
                         }
                     });
                     deleteTd.appendChild(deleteBtn);
                     tr.appendChild(deleteTd);
-            
+
                     menuItemTable.appendChild(tr);
                 });
             } else {
@@ -150,11 +196,7 @@ document.getElementById("add-menu-form").addEventListener("submit", async (e) =>
         }
 
         formFeedback(data.message || "Menu item added!", false);
-
-        // Reset form
         e.target.reset();
-
-        // Refresh table
         location.reload();
     } catch (err) {
         console.error("Add item error:", err);
@@ -162,7 +204,7 @@ document.getElementById("add-menu-form").addEventListener("submit", async (e) =>
     }
 });
 
-// Logout user
+// Logout
 document.getElementById("logout-btn").addEventListener("click", () => {
     localStorage.removeItem("token");
     window.location.href = "index.html";
