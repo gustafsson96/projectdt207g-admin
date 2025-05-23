@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    <div id="protected-feedback" class="feedback-container"></div>
     <div id="protected-content">
         <div class="logout-container">
             <button id="logout-btn">Log Out</button>
@@ -51,7 +52,7 @@
                         <button type="submit" id="submit-btn">Add Item</button>
                     </div>
                 </form>
-                <div id="form-feedback"></div>
+                <div id="form-feedback" class="feedback-container"></div>
             </div>
 
             <!-- Menu table section -->
@@ -75,31 +76,31 @@
                         </tbody>
                     </table>
                 </div>
-                <div id="user-feedback"></div>
+                <div id="menu-feedback" class="feedback-container"></div>
             </div>
         </div>
-    </div>
-    <!-- Reservations table  section -->
-    <div class="table-section">
-        <h2>Reservations</h2>
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Party Size</th>
-                        <th>Date & Time</th>
-                        <th>Special Requests</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="reservations-table-body">
-                    <!-- Reservations displayed dynamically -->
-                </tbody>
-            </table>
+        <!-- Reservations table  section -->
+        <div class="table-section">
+            <h2>Reservations</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Party Size</th>
+                            <th>Date & Time</th>
+                            <th>Special Requests</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="reservations-table-body">
+                        <!-- Reservations displayed dynamically -->
+                    </tbody>
+                </table>
+            </div>
+            <div id="reservation-feedback" class="feedback-container"></div>
         </div>
-        <div id="reservations-feedback"></div>
     </div>
 </body>
 

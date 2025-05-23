@@ -106,7 +106,7 @@ button:hover {
     background-color: #176636;
 }
 
-/* Table section */
+/* Table sections */
 .table-section {
     margin-bottom: 4em;
 }
@@ -140,6 +140,12 @@ th {
     border-bottom: 1px solid #e0e0e0;
     text-align: left;
 }
+
+/* User feedback styling */
+.feedback-container {
+    margin: 1em 0 0 0.5em;
+    font-weight: bold;
+  }
 
 @media (min-width: 768px) {
     #add-menu-form {

@@ -12,7 +12,7 @@ async function loginUser(e) {
     const passwordInput = document.getElementById("login-password").value;
 
     if (!usernameInput || !passwordInput) {
-        userFeedback("Please enter both username and password");
+        userFeedback("Please enter both username and password", true, "user-feedback");
         return;
     }
 
@@ -37,11 +37,11 @@ async function loginUser(e) {
         } else {
             const errorData = await resp.json();
             const errorMessage = errorData.message || errorData.error || "Login failed";
-            userFeedback(errorMessage);
+            userFeedback(errorMessage, true, "user-feedback");
         }
 
     } catch (error) {
-        userFeedback("An error occurred during login. Please try again.");
+        userFeedback("An error occurred during login. Please try again.", true, "user-feedback");
         console.error(error);
     }
 }

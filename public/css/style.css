@@ -59,8 +59,7 @@ h1 {
 }
 
 /* User feedback styling */
-#user-feedback {
+.feedback-container {
   margin-top: 1em;
-  color: #e74c3c;
-  text-align: center;
+  font-weight: bold;
 }

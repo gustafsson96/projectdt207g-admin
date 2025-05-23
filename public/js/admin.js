@@ -5,7 +5,7 @@ const menuItemTable = document.getElementById("menu-item-table-body");
 const token = localStorage.getItem("token");
 
 if (!token) {
-    userFeedback("You must be logged in to view this page.", true);
+    userFeedback("You must be logged in to view this page.", true, "protected-feedback");
     setTimeout(() => {
         window.location.href = "index.html";
     }, 3000);
@@ -19,7 +19,7 @@ if (!token) {
             if (!res.ok) {
                 const errorData = await res.json();
                 const errorMessage = errorData.message || "Authorization failed.";
-                userFeedback(errorMessage, true);
+                userFeedback(errorMessage, true, "menu-feedback");
                 if (res.status === 401 || res.status === 403) {
                     localStorage.removeItem("token");
                     setTimeout(() => {
@@ -115,7 +115,7 @@ if (!token) {
                                     return;
                                 }
 
-                                userFeedback("Menu item updated successfully.", false);
+                                userFeedback("Menu item updated successfully.", false, "menu-feedback");
                                 // Refresh the list
                                 loadMenuItems();
                             } catch (err) {
@@ -142,7 +142,7 @@ if (!token) {
                                     if (res.ok) {
                                         // Remove the row
                                         tr.remove();
-                                        userFeedback("Deleted successfully", false);
+                                        userFeedback("Deleted successfully", false, "menu-feedback");
                                     } else {
                                         alert("Failed to delete item");
                                     }
@@ -159,7 +159,7 @@ if (!token) {
             }
         } catch (error) {
             console.error("Error fetching menu items: ", error);
-            userFeedback("Failed to load menu items.", true);
+            userFeedback("Failed to load menu items.", true, "menu-feedback");
         }
     }
 
@@ -190,17 +190,17 @@ if (!token) {
             const data = await res.json();
 
             if (!res.ok) {
-                formFeedback(data.message || "Failed to add menu item.", true);
+                userFeedback(data.message || "Failed to add menu item.", true, "form-feedback");
                 return;
             }
 
-            formFeedback(data.message || "Menu item added!", false);
+            userFeedback(data.message || "Menu item added!", false, "form-feedback");
             e.target.reset();
             // Refresh menu list
             loadMenuItems();
         } catch (err) {
             console.error("Add item error:", err);
-            formFeedback("An unexpected error occurred. Please try again.", true);
+            userFeedback("An unexpected error occurred. Please try again.", true, "form-feedback");
         }
     });
 
@@ -216,7 +216,7 @@ if (!token) {
             if (!res.ok) {
                 const errorData = await res.json();
                 const errorMessage = errorData.message || "Failed to load reservations.";
-                userFeedback(errorMessage, true);
+                userFeedback(errorMessage, true, "reservation-feedback");
                 if (res.status === 401 || res.status === 403) {
                     localStorage.removeItem("token");
                     setTimeout(() => {
@@ -259,7 +259,7 @@ if (!token) {
                         }).then(delRes => {
                             if (delRes.ok) {
                                 tr.remove();
-                                userFeedback("Reservation deleted successfully.", false);
+                                userFeedback("Reservation deleted successfully.", false, "reservation-feedback");
                             } else {
                                 alert("Failed to delete reservation.");
                             }
@@ -274,7 +274,7 @@ if (!token) {
             });
         } catch (error) {
             console.error("Error fetching reservations:", error);
-            userFeedback("Failed to load reservations.", true);
+            userFeedback("Failed to load reservations.", true, "reservation-feedback");
         }
     }
 
