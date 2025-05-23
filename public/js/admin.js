@@ -163,9 +163,6 @@ if (!token) {
         }
     }
 
-    // Load items initially
-    loadMenuItems();
-
     // Add new menu item
     document.getElementById("add-menu-form").addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -206,6 +203,83 @@ if (!token) {
             formFeedback("An unexpected error occurred. Please try again.", true);
         }
     });
+
+    /* Display table reservations */
+    async function loadReservations() {
+        try {
+            const res = await fetch("https://projectdt207g-api.onrender.com/reservation", {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!res.ok) {
+                const errorData = await res.json();
+                const errorMessage = errorData.message || "Failed to load reservations.";
+                userFeedback(errorMessage, true);
+                if (res.status === 401 || res.status === 403) {
+                    localStorage.removeItem("token");
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 3000);
+                }
+                return;
+            }
+
+            const reservations = await res.json();
+
+            const tbody = document.getElementById("reservations-table-body");
+            tbody.innerHTML = "";
+
+            if (reservations.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6">No reservations found.</td></tr>`;
+                return;
+            }
+
+            reservations.forEach(reservation => {
+                const tr = document.createElement("tr");
+
+                tr.innerHTML = `
+                    <td>${reservation.name}</td>
+                    <td>${reservation.email}</td>
+                    <td>${reservation.partySize}</td>
+                    <td>${new Date(reservation.dateTime).toLocaleString()}</td>
+                    <td>${reservation.specialRequest || ""}</td>
+                    <td><button class="delete-reservation-btn">Delete</button></td>
+                `;
+
+                const deleteBtn = tr.querySelector(".delete-reservation-btn");
+                deleteBtn.addEventListener("click", () => {
+                    if (confirm(`Are you sure you want to delete the reservation for "${reservation.name}"?`)) {
+                        fetch(`https://projectdt207g-api.onrender.com/reservation/${reservation._id}`, {
+                            method: "DELETE",
+                            headers: {
+                                "Authorization": `Bearer ${token}`,
+                            }
+                        }).then(delRes => {
+                            if (delRes.ok) {
+                                tr.remove();
+                                userFeedback("Reservation deleted successfully.", false);
+                            } else {
+                                alert("Failed to delete reservation.");
+                            }
+                        }).catch(err => {
+                            console.error("Delete error:", err);
+                            alert("An error occurred while deleting.");
+                        });
+                    }
+                });
+
+                tbody.appendChild(tr);
+            });
+        } catch (error) {
+            console.error("Error fetching reservations:", error);
+            userFeedback("Failed to load reservations.", true);
+        }
+    }
+
+    loadMenuItems();
+    loadReservations();
 
     // Logout
     document.getElementById("logout-btn").addEventListener("click", () => {
