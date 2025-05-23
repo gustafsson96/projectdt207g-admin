@@ -8,6 +8,7 @@ It manages menu items for the fictional restaurant "The Green Slice" and allows 
 * View existing menu items
 * Add a new menu item
 * Update and delete existing menu items
+* View and delete table reservations made by customers
 * Log out
 
 The site interacts with the backend API created specifically for this project and the protected content is secured via JWT (JSON Web Token) authentication.
@@ -24,7 +25,8 @@ The other parts of the project are:
 * Form with validation to add a new menu item with name, category, ingredients, price and vegan alternative (y/n).
 * Inline editing for updating a menu item with buttons to save or cancel.
 * Removing a menu item. 
-* Feedback messages based on success/error.
+* Feedback messages based on container and success/error.
+* Viewing and deleting table reservations.
 * Logout button.
 
 ## Technologies Used
