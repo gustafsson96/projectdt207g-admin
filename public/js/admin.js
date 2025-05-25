@@ -4,15 +4,17 @@ const protectedContent = document.getElementById("protected-content");
 const menuItemTable = document.getElementById("menu-item-table-body");
 const token = localStorage.getItem("token");
 
+// Redirect if no token is found
 if (!token) {
     userFeedback("You must be logged in to view this page.", true, "protected-feedback");
     setTimeout(() => {
         window.location.href = "index.html";
     }, 3000);
 } else {
+    // Show protected content after login
     document.getElementById("protected-content").style.display = "block";
 
-    // Function to load menu items
+    // Load menu items from API and display in admin table
     async function loadMenuItems() {
         try {
             const res = await fetch("https://projectdt207g-api.onrender.com/menu");
@@ -20,8 +22,9 @@ if (!token) {
                 const errorData = await res.json();
                 const errorMessage = errorData.message || "Authorization failed.";
                 userFeedback(errorMessage, true, "menu-feedback");
+
                 if (res.status === 401 || res.status === 403) {
-                    localStorage.removeItem("token");
+                    localStorage.removeItem("token"); // Clear token if unauthorized
                     setTimeout(() => {
                         window.location.href = "index.html";
                     }, 3000);
@@ -36,6 +39,7 @@ if (!token) {
                 data.forEach(menuItem => {
                     const tr = document.createElement("tr");
 
+                    // Fill table columns: name, categorym ingredients, price, vegan alternative
                     const nameTd = document.createElement("td");
                     nameTd.textContent = menuItem.name;
                     tr.appendChild(nameTd);
@@ -56,9 +60,11 @@ if (!token) {
                     veganTd.textContent = menuItem.vegan_alternative ? "Yes" : "No";
                     tr.appendChild(veganTd);
 
+                    // Update button and handler
                     const updateTd = document.createElement("td");
                     const updateBtn = document.createElement("button");
                     updateBtn.textContent = "Update";
+
                     updateBtn.addEventListener("click", () => {
                         const existingEditRow = document.querySelector("tr.editing-row");
                         if (existingEditRow) {
@@ -84,11 +90,13 @@ if (!token) {
                         tr.after(editRow);
                         updateBtn.disabled = true;
 
+                        // Cancel edit
                         document.getElementById(`cancel-${menuItem._id}`).addEventListener("click", () => {
                             editRow.remove();
                             updateBtn.disabled = false;
                         });
 
+                        // Save edit (PUT request)
                         document.getElementById(`save-${menuItem._id}`).addEventListener("click", async () => {
                             const updatedItem = {
                                 name: document.getElementById(`edit-name-${menuItem._id}`).value.trim(),
@@ -116,14 +124,15 @@ if (!token) {
                                 }
 
                                 userFeedback("Menu item updated successfully.", false, "menu-feedback");
-                                // Refresh the list
-                                loadMenuItems();
+                                loadMenuItems(); // Refresh the list
                             } catch (err) {
                                 console.error("Update error:", err);
                                 alert("An error occurred while updating.");
                             }
                         });
                     });
+
+                    // Delete button and handler (DELETE)
                     updateTd.appendChild(updateBtn);
                     tr.appendChild(updateTd);
 
@@ -140,8 +149,7 @@ if (!token) {
                             })
                                 .then(res => {
                                     if (res.ok) {
-                                        // Remove the row
-                                        tr.remove();
+                                        tr.remove(); // Remove the row
                                         userFeedback("Deleted successfully", false, "menu-feedback");
                                     } else {
                                         alert("Failed to delete item");
@@ -163,7 +171,7 @@ if (!token) {
         }
     }
 
-    // Add new menu item
+    // Add new menu item form submission handler (POST)
     document.getElementById("add-menu-form").addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -178,6 +186,7 @@ if (!token) {
         const newItem = { name, category, ingredients, price, vegan_alternative: veganAlternative };
 
         try {
+            // Fetch all reservations from the API with authorization token
             const res = await fetch("https://projectdt207g-api.onrender.com/menu", {
                 method: "POST",
                 headers: {
@@ -196,15 +205,14 @@ if (!token) {
 
             userFeedback(data.message || "Menu item added!", false, "form-feedback");
             e.target.reset();
-            // Refresh menu list
-            loadMenuItems();
+            loadMenuItems(); // Refresh menu list
         } catch (err) {
             console.error("Add item error:", err);
             userFeedback("An unexpected error occurred. Please try again.", true, "form-feedback");
         }
     });
 
-    /* Display table reservations */
+    /* Load reservations for admin */
     async function loadReservations() {
         try {
             const res = await fetch("https://projectdt207g-api.onrender.com/reservation", {
@@ -217,6 +225,7 @@ if (!token) {
                 const errorData = await res.json();
                 const errorMessage = errorData.message || "Failed to load reservations.";
                 userFeedback(errorMessage, true, "reservation-feedback");
+
                 if (res.status === 401 || res.status === 403) {
                     localStorage.removeItem("token");
                     setTimeout(() => {
@@ -227,18 +236,20 @@ if (!token) {
             }
 
             const reservations = await res.json();
-
             const tbody = document.getElementById("reservations-table-body");
             tbody.innerHTML = "";
 
+            // Display message if no reservations are found
             if (reservations.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6">No reservations found.</td></tr>`;
                 return;
             }
 
+            // Create table rows for each reservation
             reservations.forEach(reservation => {
                 const tr = document.createElement("tr");
 
+                // Populate table cells 
                 tr.innerHTML = `
                     <td>${reservation.name}</td>
                     <td>${reservation.email}</td>
@@ -248,9 +259,12 @@ if (!token) {
                     <td><button class="delete-reservation-btn">Delete</button></td>
                 `;
 
+                // Delete reservation button
                 const deleteBtn = tr.querySelector(".delete-reservation-btn");
                 deleteBtn.addEventListener("click", () => {
+                    // Confirm deletion
                     if (confirm(`Are you sure you want to delete the reservation for "${reservation.name}"?`)) {
+                        // Send DELETE request to the API
                         fetch(`https://projectdt207g-api.onrender.com/reservation/${reservation._id}`, {
                             method: "DELETE",
                             headers: {
@@ -269,7 +283,7 @@ if (!token) {
                         });
                     }
                 });
-
+                // Append row to reservations table
                 tbody.appendChild(tr);
             });
         } catch (error) {
@@ -278,10 +292,11 @@ if (!token) {
         }
     }
 
+    // Inital load of data
     loadMenuItems();
     loadReservations();
 
-    // Logout
+    // Logout button handler (clears token)
     document.getElementById("logout-btn").addEventListener("click", () => {
         localStorage.removeItem("token");
         window.location.href = "index.html";
