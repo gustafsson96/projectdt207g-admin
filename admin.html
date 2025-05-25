@@ -21,7 +21,7 @@
             <p>The Green Slice</p>
         </div>
         <div class="container">
-            <!-- Form section -->
+            <!-- Add menu form section -->
             <div class="form-section">
                 <h2>Add New Menu Item</h2>
                 <form id="add-menu-form">
@@ -37,7 +37,6 @@
                         <label for="item-ingredients">Ingredients (comma-separated):</label>
                         <input type="text" id="item-ingredients">
                     </div>
-
                     <div class="form-group">
                         <label for="item-price">Price:</label>
                         <input type="number" id="item-price" step="0.01">
@@ -52,13 +51,14 @@
                         <button type="submit" id="submit-btn">Add Item</button>
                     </div>
                 </form>
+                <!-- Menu item form feedback (on form submission)-->                
                 <div id="form-feedback" class="feedback-container"></div>
             </div>
-
             <!-- Menu table section -->
             <div class="table-section">
                 <h2>Available Menu Items</h2>
                 <div class="table-wrapper">
+                    <!-- Menu table -->
                     <table>
                         <thead>
                             <tr>
@@ -76,6 +76,7 @@
                         </tbody>
                     </table>
                 </div>
+             <!-- Menu table feedback (on update/delete)-->               
                 <div id="menu-feedback" class="feedback-container"></div>
             </div>
         </div>
@@ -83,6 +84,7 @@
         <div class="table-section">
             <h2>Reservations</h2>
             <div class="table-wrapper">
+                <!-- Reservations table -->
                 <table>
                     <thead>
                         <tr>
@@ -99,6 +101,7 @@
                     </tbody>
                 </table>
             </div>
+            <!-- Reservations table feedback (on delete)-->
             <div id="reservation-feedback" class="feedback-container"></div>
         </div>
     </div>

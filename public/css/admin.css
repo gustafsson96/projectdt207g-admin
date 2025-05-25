@@ -1,13 +1,18 @@
+/* Styling for admin.html */
+
+/* General body styling */
 body {
     font-family: Georgia, 'Times New Roman', Times, serif;
     margin: 0;
     padding: 0;
 }
 
+/* Hide protected content for admin page initially */
 #protected-content {
     display: none;
 }
 
+/* Logout button container */
 .logout-container {
     display: flex;
     justify-content: end;
@@ -55,12 +60,11 @@ body {
     margin-top: 2em;
 }
 
-/* Form section */
+/* Add menu item form section */
 .form-section h2 {
     margin: 0;
 }
 
-/* Form styling */
 #add-menu-form {
     display: flex;
     flex-direction: column;
@@ -148,6 +152,7 @@ th {
     font-weight: bold;
 }
 
+/* Media query for screens smaller than 768px */
 @media (min-width: 768px) {
     #add-menu-form {
         flex-direction: row;
