@@ -163,7 +163,7 @@ if (!token) {
                     menuItemTable.appendChild(tr);
                 });
             } else {
-                menuItemTable.innerHTML = `<tr><td colspan="6">No menu items found.</td></tr>`;
+                menuItemTable.innerHTML = `<tr class="no-data"><td colspan="7">No menu items found.</td></tr>`;
             }
         } catch (error) {
             console.error("Error fetching menu items: ", error);
@@ -241,7 +241,7 @@ if (!token) {
 
             // Display message if no reservations are found
             if (reservations.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6">No reservations found.</td></tr>`;
+                tbody.innerHTML = `<tr class="no-data"><td colspan="6">No reservations found.</td></tr>`;
                 return;
             }
 
