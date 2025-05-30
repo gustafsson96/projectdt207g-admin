@@ -13,7 +13,7 @@ It manages menu items for the fictional restaurant "The Green Slice" and allows 
 
 The site interacts with the backend API created specifically for this project and the protected content is secured via JWT (JSON Web Token) authentication.
 
-Link to the live admin site: [The Green Slice Admin](https://dt207gadminjg.netlify.app/admin.html)
+Link to the live admin site: [The Green Slice Admin](https://dt207gadminjg.netlify.app)
 <br><br>
 The other parts of the project are:
 * The backend API - [API repository](https://github.com/gustafsson96/projectdt207g-api.git)
